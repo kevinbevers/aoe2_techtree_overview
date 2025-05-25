@@ -49,7 +49,7 @@ export const useDataTechTree = () => {
 
       const [resp1, resp2] = await Promise.all([
         request<TechTreeData>(`${config.API_AOE2TECHTREE_BASE}/data.json`),
-        request<TechTreeStrings>(`${config.API_AOE2TECHTREE_BASE}/locales/ru/strings.json`),
+        request<TechTreeStrings>(`${config.API_AOE2TECHTREE_BASE}/locales/en/strings.json`),
       ]);
 
       setRespData(resp1);

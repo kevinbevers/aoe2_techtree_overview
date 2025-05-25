@@ -1,31 +1,65 @@
 .card {
   display: inline-block;
-  border: 5px solid transparent;
+  margin-right: 4px;
+  /* border: 2px solid transparent; */
+  outline-offset: -4px;
+  outline: 4px solid transparent;
   position: relative;
 }
 
 .card_build {
   border-color: #751E02;
+  outline-color:  #751E02;
+
 }
 
 .card_unit {
   border-color: #3A6A80;
+  outline-color: #3A6A80;
+
+
 }
 
 .card_tech {
   border-color: #234621;
+  outline-color: #234621;
+}
+
+.card_unique {
+  /* border-color: #8C2682; */
+  border-color: #FFD700;
+  outline-color: #FFD700;
+}
+
+.uu_Camel, .uu_Cav, .uu_raiding_Cav {
+  margin-top: 93px;
+}
+
+.uu_infantry {
+  margin-top: 0px;
+}
+
+.uu_archer, .uu_Cav_archer {
+  margin-top: 46px;
+}
+
+.uu_siege_weapon, .uu_siege, .uu_mounted_scorpion {
+  margin-top: 139px;
 }
 
 .card_disabled {
-  opacity: 0.7;
+  /* & img {
+    opacity: 0.7;
+  } */
 
   &:after,
   &:before {
+    z-index: 1;
     content: "";
     position: absolute;
-    width: 110%;
+    width: 100%;
     height: 5px;
-    background: red;
+    background: rgba(255,0,0,1);
     top: 0;
     bottom: 0;
     left: 0;
@@ -44,7 +78,17 @@
 
 .card__img {
   display: block;
+  height: 42.5px;
+  width: 42.5px;
+  background-blend-mode: overlay;
+  background-size:     85%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
+
+/* .disabled_img {
+  opacity: 0.7;
+} */
 
 .circles {
   position: absolute;
@@ -53,13 +97,13 @@
   bottom: 0;
   display: flex;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
+  /* background: rgba(0, 0, 0, 0.5); */
   padding: 5px 0;
 }
 
 .circles__item {
-  width: 5px;
-  height: 5px;
+  width: 7px;
+  height: 7px;
   background: red;
   margin: 0 1px;
   border-radius: 50%;
