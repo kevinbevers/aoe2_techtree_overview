@@ -51,6 +51,7 @@
 
 .wrapper {
   display: inline-flex;
+  margin-bottom: 100px;
 }
 
 .civ_title {
@@ -113,7 +114,7 @@
   }
 
   & img {
-    height: 5vh;
+    height: 4vh;
     display: inline-block;
     vertical-align: middle;
   }

@@ -3,7 +3,7 @@ import { EBuild, tree } from "src/fixtures/tree.ts";
 import { request } from "src/utils/request.ts";
 import { config } from "src/config.ts";
 
-export type TechTreeCiv = "Aztecs" | "Bengalis" | "Berbers" | "Bohemians" | "Britons" | "Bulgarians" | "Burgundians" | "Burmese" | "Byzantines" | "Celts" | "Chinese" | "Cumans" | "Dravidians" | "Ethiopians" | "Franks" | "Goths" | "Gurjaras" | "Hindustanis" | "Huns" | "Incas" | "Italians" | "Japanese" | "Khmer" | "Koreans" | "Lithuanians" | "Magyars" | "Malay" | "Malians" | "Mayans" | "Mongols" | "Persians" | "Poles" | "Portuguese" | "Romans" | "Saracens" | "Sicilians" | "Slavs" | "Spanish" | "Tatars" | "Teutons" | "Turks" | "Vietnamese" | "Vikings";
+export type TechTreeCiv = "Aztecs" | "Bengalis" | "Berbers" | "Bohemians" | "Britons" | "Bulgarians" | "Burgundians" | "Burmese" | "Byzantines" | "Celts" | "Chinese" | "Cumans" | "Dravidians" | "Ethiopians" | "Franks" | "Goths" | "Gurjaras" | "Hindustanis" | "Huns" | "Incas" | "Italians" | "Japanese" | "Jurchens" | "Khitans" | "Khmer" | "Koreans" | "Lithuanians" | "Magyars" | "Malay" | "Malians" | "Mayans" | "Mongols" | "Persians" | "Poles" | "Portuguese" | "Romans" | "Saracens" | "Shu" | "Sicilians" | "Slavs" | "Spanish" | "Tatars" | "Teutons" | "Turks" | "Vietnamese" | "Vikings" | "Wei" | "Wu";
 
 export type TechTreeData = {
   civ_helptexts: Record<TechTreeCiv, string>;

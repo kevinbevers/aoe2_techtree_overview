@@ -27,13 +27,23 @@ export type Tree = {
 
 export const tree: Tree = {
   war_builds: {
+    [EBuild.CASTLE]: {
+      units: [
+        [1811],
+        [1966],
+        [1954],
+        [1978],
+      ],
+    },
     [EBuild.BARRACKS]: {
       units: [
-        [77, 473, 567, 1793], //74, 75
-        [93, 358, 359],
-        [751, 753, 752],
+        [75, 77, 473, 567, 1793], //74, 75 //Militia line (Add 75 for jurchesn and now all militia line has 4 upgrade dots instead of 3 in previous build)
+        [93, 358, 359], // Spearman line
+        [751, 753, 752], // Eagle line
+        [1901, 1903], //Fire lancer
         [882],
-        [1699],
+        [1699], //Conditierro?
+        [1974], //Jian swordsmen
       ],
       // techs: [716, 875, 215, 602],
     },
@@ -46,6 +56,8 @@ export const tree: Tree = {
         [873, 875],
         [1010, 1012],
         [5],
+        [1911], // Grenadier
+        [1952], //Xianbei Raider
       ],
       // techs: [437, 436]
     },
@@ -67,6 +79,9 @@ export const tree: Tree = {
         [1258, 422, 548],
         [1744, 1746],
         [280, 550, 588],
+        [1904,1907],
+        [1923],
+        [1942],
         [279, 542],
         [1105],
         [36, 1709],
@@ -81,7 +96,7 @@ export const tree: Tree = {
         [74, 76, 77],
         [81, 82, 80],
       ],
-      techs: [39, 435, 436, 716, 875, 215, 437, 602],
+      techs: [39, 435, 436, 875, 215, 437, 602], //716 is supplies which has been removed.
     },
     [EBuild.UNIVERSITY]: {
       tech_chains: [
@@ -100,7 +115,7 @@ export const tree: Tree = {
     },    
     [EBuild.DOCK]: {
       units: [
-        [1103, 529, 532],
+        [1103, 529, 532, 1302], //1302 = dragon ship
         [539, 21, 442],
         [1104, 527, 528],
         [420, 691],
@@ -108,7 +123,8 @@ export const tree: Tree = {
         [831, 832],
         [250, 533],
         [1004, 1006],
-        [1750]
+        [1750],
+        [1948]
       ],
       techs: [375, 373]
     },

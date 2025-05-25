@@ -15,5 +15,10 @@ export const cleanString = (text: string) => {
   const camelCleaned = replaceAll(skirmCleaned, "camel rider", "Camel");
   const tcCleaned = replaceAll(camelCleaned, "Town Center", "TC");
   const maxCleaned = replaceAll(tcCleaned, "maximum", "max");
-  return replaceAll(maxCleaned.replace(/(\r\n|\n|\r)/gm, "").trim(), "<br>", "");
+  const dmgCleaned = replaceAll(maxCleaned, "damage", "dmg");
+  const atkCleaned = replaceAll(dmgCleaned, "attack", "atk");
+  const vilCleaned = replaceAll(atkCleaned, "Villagers", "Vills");
+  const minCleaned = replaceAll(vilCleaned, "minute", "min");
+  const regenCleaned = replaceAll(minCleaned, "regenerate", "regen");
+  return replaceAll(regenCleaned.replace(/(\r\n|\n|\r)/gm, "").trim(), "<br>", "");
 };

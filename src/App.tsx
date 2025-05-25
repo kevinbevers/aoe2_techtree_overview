@@ -13,7 +13,7 @@ import domtoimage from 'dom-to-image';
 
 type Civ = keyof NonNullable<ReturnType<typeof useDataTechTree>["datasets"]>["civ_names"];
 
-const WAR_BUILDS_SORTING = [EBuild.BARRACKS, EBuild.ARCHERY, EBuild.HORSE_STABLE, EBuild.ENGINE, EBuild.DOCK, EBuild.SMITHY, EBuild.UNIVERSITY, EBuild.MONASTERY];
+const WAR_BUILDS_SORTING = [EBuild.BARRACKS, EBuild.ARCHERY, EBuild.HORSE_STABLE, EBuild.ENGINE, EBuild.DOCK, EBuild.SMITHY, EBuild.UNIVERSITY, EBuild.MONASTERY, EBuild.CASTLE];
 
 function App() {
   const printRef = useRef<HTMLDivElement>(null);
@@ -78,10 +78,10 @@ function App() {
     const ut2 = uniqueTechs[2].split("(")[1] + (uniqueTechs[2].split("(")[2] !== undefined ? uniqueTechs[2].split("(")[2]?.replace(")", "") : "");
 
     return <div className={classes.info_text}>
-      {bonus.map((b) => (<p>{cleanString(b)}</p>))}
+      {bonus.map((b) => (<p>⚙️{cleanString(b)}</p>))}
       <p><b>TB:</b> {cleanString(teamBonus)}</p>
-      <p><img alt="UT1" src="https://aoe2techtree.net/img/Techs/unique_tech_1.png" /> {cleanString(ut1.replace(")", ""))}</p>
-      <p><img alt="UT2" src="https://aoe2techtree.net/img/Techs/unique_tech_2.png" /> {cleanString(ut2.replace(")", ""))}</p>
+      <div style={{display: "inline-flex"}}><img alt="UT1" src="https://aoe2techtree.net/img/Techs/unique_tech_1.png" /><p>{cleanString(ut1.replace(")", ""))}</p></div>
+      <div style={{display: "inline-flex"}}><img alt="UT2" src="https://aoe2techtree.net/img/Techs/unique_tech_2.png" /><p>{cleanString(ut2.replace(")", ""))}</p></div>
     </div>;
   };
 
@@ -90,8 +90,8 @@ function App() {
     uniqueUnit = helpText.split("<b>")[1];
     const uuCleaned = cleanString(uniqueUnit.split(",")[0]).trim()?.replace(/(\r\n|\n|\r)/gm, "")?.replace("Unique Unit:</b> ", "")?.replace("Unique Unit:</b>", "")?.replace("Unique Units:</b>", "");
     console.log(uuCleaned.split("(")[1].replace(")", "").trim());
-
-    return(uuCleaned.split("(")[1].replace(")", "").trim().replace(" ", "_"));
+    const final_pre_clean = uuCleaned.split("(")[1].replace(")", "").trim().replace(" ", "_")
+    return(final_pre_clean.replace(" ", "_"));
   };
 
   const handleDownloadImage = async (civName: string) => {
@@ -186,8 +186,9 @@ function App() {
               />
             </div>
 
+
             <div className={classes.move_left}>
-              {warBuilds.slice(5, 8).map((buildId) => (<>
+              {warBuilds.slice(5, 9).map((buildId) => (<>
                 <CardGroup
                   civName={civ}
                   key={buildId}

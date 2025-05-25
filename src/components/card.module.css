@@ -14,15 +14,22 @@
 }
 
 .card_unit {
+  /* border-color: #3A6A80;
+  outline-color: #3A6A80; */
   border-color: #3A6A80;
   outline-color: #3A6A80;
-
-
 }
 
 .card_tech {
   border-color: #234621;
   outline-color: #234621;
+}
+
+.card_regional {
+  border-color: #543eb8;
+  outline-color: #543eb8;
+  /* border-color: #505AE4;
+  outline-color: #505AE4; */
 }
 
 .card_unique {
@@ -35,15 +42,15 @@
   margin-top: 93px;
 }
 
-.uu_infantry {
+.uu_infantry, .uu_Infrantry {
   margin-top: 0px;
 }
 
-.uu_archer, .uu_Cav_archer {
+.uu_archer, .uu_Cav_archer, .uu_Archer, .uu_Mounted_Archer, .uu_Foot_Archer, .uu_Ranged_Mounted_Unit {
   margin-top: 46px;
 }
 
-.uu_siege_weapon, .uu_siege, .uu_mounted_scorpion {
+.uu_siege_weapon, .uu_siege, .uu_mounted_scorpion, .uu_Siege_Gunpowder_Unit {
   margin-top: 139px;
 }
 
