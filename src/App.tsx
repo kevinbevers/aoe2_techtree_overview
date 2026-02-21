@@ -10,13 +10,15 @@ import { EBuild } from "./fixtures/tree.ts";
 import { useDataTechTree } from "src/hooks/use_data.ts";
 import html2canvas from 'html2canvas';
 import domtoimage from 'dom-to-image';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 type Civ = keyof NonNullable<ReturnType<typeof useDataTechTree>["datasets"]>["civ_names"];
 
 const WAR_BUILDS_SORTING = [EBuild.BARRACKS, EBuild.ARCHERY, EBuild.HORSE_STABLE, EBuild.ENGINE, EBuild.DOCK, EBuild.SMITHY, EBuild.UNIVERSITY, EBuild.MONASTERY, EBuild.CASTLE];
 
 function App() {
-  const printRef = useRef<HTMLDivElement>(null);
+  const printRefs = useRef<Map<Civ, HTMLDivElement>>(new Map());
   const {
     datasets,
     strings,
@@ -52,7 +54,6 @@ function App() {
   const scrapCivHelpText = (helpText: string, civName: string) => {
     // console.log(helpText);
     let bonus: string[] = [];
-    let uniqueUnit: string = "";
     let uniqueTechs: string[] = [];
     let teamBonus: string = "";
 
@@ -61,7 +62,6 @@ function App() {
     bonus = cleanUp.split('•');
     // Remove first empty string by using shift
     bonus.shift();
-    uniqueUnit = helpText.split("<b>")[1];
     uniqueTechs = helpText.split("<b>")[2].split("<br>");
     teamBonus = helpText.split("<b>")[3].split("<br>")[1];
     // bonus.forEach((b) => {
@@ -94,38 +94,71 @@ function App() {
     return(final_pre_clean.replace(" ", "_"));
   };
 
-  const handleDownloadImage = async (civName: string) => {
-    const element = printRef.current;
-    if(element != null) {
-    const canvas = await html2canvas(element, {useCORS: true, scale: 1, backgroundColor: null});
+  const captureElementToPng = async (element: HTMLElement | null): Promise<string | null> => {
+    if (!element) return null;
 
-    const data = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
+    // hide other wrappers to avoid empty/blank captures; keep the wrapper that contains the element
+    const wrappers = Array.from(document.querySelectorAll(`.${classes.wrapper}`)) as HTMLElement[];
+    const wrapperToKeep = element.closest(`.${classes.wrapper}`) as HTMLElement | null;
+    wrappers.forEach((w) => { if (w !== wrapperToKeep) w.style.visibility = 'hidden'; });
 
-    if (typeof link.download === 'string') {
-      link.href = data;
-      link.download = `${civName}.png`;
+    // small delay to ensure styles applied
+    await new Promise((r) => setTimeout(r, 250));
 
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } else {
-      window.open(data);
+    try {
+      const dataUrl = await domtoimage.toPng(element, { quality: 1 });
+      return dataUrl;
+    } finally {
+      wrappers.forEach((w) => { w.style.visibility = ''; });
     }
-  }
   };
 
-  const handleDownloadImageAlt = async (civName: string) => {
-    const element = printRef.current;
-    if(element != null) {
-      domtoimage.toPng(element, { quality: 1 })
-      .then(function (dataUrl: any) {
-          var link = document.createElement('a');
-          link.download = `${civName.toLowerCase()}.png`;
-          link.href = dataUrl;
-          link.click();
-      });
-  }
+  const handleDownloadImageAlt = async (civName: Civ) => {
+    const element = printRefs.current.get(civName) || null;
+    const dataUrl = await captureElementToPng(element);
+    if (!dataUrl) return;
+
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = `${civName.toLowerCase()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDownloadAll = async () => {
+    if (!datasets || !datasets.civ_names) return;
+
+    // save current selection
+    const prevSelected = new Map(selectedCivs);
+
+    // select all civs so their wrappers render
+    const allMap = new Map<Civ, boolean>();
+    const allCivs = Object.keys(datasets.civ_names) as Civ[];
+    allCivs.forEach((c) => allMap.set(c, true));
+    setSelectedCivs(allMap);
+
+    // wait for the UI to render the newly selected civs
+    await new Promise((r) => setTimeout(r, 400));
+
+    const zip = new JSZip();
+
+    for (const civ of allCivs) {
+      const element = printRefs.current.get(civ) || null;
+      const dataUrl = await captureElementToPng(element);
+      if (!dataUrl) continue;
+
+      const base64 = dataUrl.split(',')[1];
+      zip.file(`${civ.toLowerCase()}.png`, base64, { base64: true });
+
+      await new Promise((r) => setTimeout(r, 150));
+    }
+
+    const content = await zip.generateAsync({ type: 'blob' });
+    saveAs(content, 'civs.zip');
+
+    // restore previous selection
+    setSelectedCivs(prevSelected);
   };
   
 
@@ -144,15 +177,19 @@ function App() {
       </div>
 
       <div>
+        <div style={{ marginBottom: 12 }}>
+          <button type="button" onClick={handleDownloadAll}>Download All</button>
+        </div>
+
         {selectedCivsArray.map((civ) => (<div className={classes.wrapper}>
-            <div className={classes.civ_title}>
-              <h5>{civ}</h5>
-              <img className={classes.main__pic} alt={civ} src={getPic("civ", civ)} />
-              <button type="button" onClick={() => {handleDownloadImageAlt(civ)}}>
-                Download as Image
-              </button>
-            </div>
-          <div className={classes.main} key={civ} ref={printRef}>
+             <div className={classes.civ_title}>
+               <h5>{civ}</h5>
+               <img className={classes.main__pic} alt={civ} src={getPic("civ", civ)} />
+               <button type="button" onClick={() => {handleDownloadImageAlt(civ)}}>
+                 Download as Image
+               </button>
+             </div>
+          <div className={classes.main} key={civ} ref={(el) => { if (el) printRefs.current.set(civ, el as HTMLDivElement); else printRefs.current.delete(civ); }}>
             {/* <div><img className={classes.main__pic} alt={civ} src={getPic("civ", civ)} /></div> */}
             {/* <div
               className={classes.main__desc}
