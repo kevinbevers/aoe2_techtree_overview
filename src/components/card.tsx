@@ -4,7 +4,6 @@ import { EBuild } from "../fixtures/tree.ts";
 import classes from "./card.module.css";
 import clsx from "clsx";
 import { TechTreeCiv, TechTreeData } from "../hooks/use_data.ts";
-import { backgroundImage } from "html2canvas/dist/types/css/property-descriptors/background-image";
 
 const uniqueUnitUpgrades = (propName: string, propChain: number[], civName1: string, civName2: string, firstUnitInTreeID: number, unitToReplace: number, ReplacementUnit: number) => {
   const checkArray = propChain;
@@ -176,17 +175,17 @@ export const Card: FC<Props> = (props) => {
         if (props.type === "unit") {
           // console.log("unit.return: " + props.civData.units.some((unit) => unit.id === item));
           // console.log(props.civData.unique);
-          if (props.civData.units.some((unit) => unit.id === item)) {
+          if (props.civData.units.some((unit) => unit.id === item && unit.available !== false)) {
             listOfAvailableUnits.push(item);
           }
         } else if (props.type === "tech_chain") {
           // console.log("techchain.return: " + props.civData.techs.some((tech) => tech.id === item));
 
           // Add Donjon for sicilians to uni tech tree
-          if(props.civData.buildings.some((building) => building.id === item)){
+          if(props.civData.buildings.some((building) => building.id === item && building.available !== false)){
             listOfAvailableUnits.push(item);
           }
-          if (props.civData.techs.some((tech) => tech.id === item)) {
+          if (props.civData.techs.some((tech) => tech.id === item && tech.available !== false)) {
             listOfAvailableUnits.push(item);
           }
         }
@@ -208,16 +207,44 @@ export const Card: FC<Props> = (props) => {
     }
   }, [props]);
 
+  const resolvedImageId = useMemo(() => {
+    if (!picId) return undefined;
+
+    let item;
+    if (props.type === "build") {
+      item = props.civData.buildings.find((b) => b.id === picId);
+    } else if (props.type === "tech") {
+      item = props.civData.techs.find((t) => t.id === picId);
+    } else if (props.type === "tech_chain") {
+      item = props.civData.techs.find((t) => t.id === picId) || props.civData.buildings.find((b) => b.id === picId);
+    } else if (props.type === "unit") {
+      item = props.civData.units.find((u) => u.id === picId);
+    }
+
+    return item?.picture_index ?? picId;
+  }, [picId, props.civData, props.type]);
 
   const isDisabled = useMemo(() => {
     if (props.type === "build") {
-      return !props.civData.buildings.some(({ id }) => id === props.id);
+      const building = props.civData.buildings.find(({ id }) => id === props.id);
+      return building ? building.available === false : true;
     } else if (props.type === "unit") {
-        return props.unique ? false : !props.chain.some((id) => props.civData.units.some((unit) => unit.id === id));
+      if (props.unique) return false;
+      // Check if any unit in the chain is available
+      return !props.chain.some((id) => {
+        const unit = props.civData.units.find((u) => u.id === id);
+        return unit && unit.available !== false;
+      });
     } else if (props.type === "tech") {
-      return !props.civData.techs.some(({ id }) => id === props.id);
+      const tech = props.civData.techs.find(({ id }) => id === props.id);
+      return tech ? tech.available === false : true;
     } else if (props.type === "tech_chain") {
-      return props.chain.some((id) => id === 1665) ? false : !props.chain.some((id) => props.civData.techs.some((tech) => tech.id === id));
+      if (props.chain.some((id) => id === 1665)) return false;
+      // Check if any tech in the chain is available
+      return !props.chain.some((id) => {
+        const tech = props.civData.techs.find((t) => t.id === id);
+        return tech && tech.available !== false;
+      });
     }
 
     return false;
@@ -235,7 +262,7 @@ export const Card: FC<Props> = (props) => {
         // console.log("item: " + item);
         if (props.type === "unit") {
           // console.log("unit.return: " + props.civData.units.some((unit) => unit.id === item));
-          if (props.civData.units.some((unit) => unit.id === item)) {
+          if (props.civData.units.some((unit) => unit.id === item && unit.available !== false)) {
             listOfAvailableUnits.push(item);
           }
         }
@@ -265,7 +292,7 @@ export const Card: FC<Props> = (props) => {
         // console.log("item: " + item);
         if (props.type === "unit") {
           // console.log("unit.return: " + props.civData.units.some((unit) => unit.id === item));
-          if (props.civData.units.some((unit) => unit.id === item)) {
+          if (props.civData.units.some((unit) => unit.id === item && unit.available !== false)) {
             listOfAvailableUnits.push(item);
           }
         }
@@ -273,8 +300,8 @@ export const Card: FC<Props> = (props) => {
 
       const result = listOfAvailableUnits.slice(-1)[0];
       if(result !== undefined){
-        //  Camel, Heavy Camel, Eagle scout, eagle warrior, elite eagle warrior, Fire lancer, Elite fire lancer, Battle Elephant, Elite Battle Elephant, Steppe Lancer, Elite Steppe, Lou Chuan, Dromon, Xolotl Warrior, Rocket Cart, Heavy Rocket Cart, Armored Elephant, Siege Elephant, Traction Treb, Elephant Archer, Elite Elephant Archer
-          if([329, 330, 751, 753, 752, 1901, 1903, 1132, 1134, 1370, 1372, 1948, 1795, 1570, 1904, 1907, 1744, 1746, 1942, 873, 875].includes(result)) {
+        //  Camel, Heavy Camel, Eagle scout, eagle warrior, elite eagle warrior, Fire lancer, Elite fire lancer, Battle Elephant, Elite Battle Elephant, Steppe Lancer, Elite Steppe, Lou Chuan, Dromon, Xolotl Warrior, Rocket Cart, Heavy Rocket Cart, Armored Elephant, Siege Elephant, Traction Treb, Elephant Archer, Elite Elephant Archer, Catapult galleon
+          if([329, 330, 751, 753, 752, 1901, 1903, 1132, 1134, 1370, 1372, 1948, 1795, 1570, 1904, 1907, 1744, 1746, 1942, 873, 875, 2633].includes(result)) {
             return true;
           }
         }
@@ -299,8 +326,8 @@ export const Card: FC<Props> = (props) => {
     >
       <div
         className={clsx(classes.card__img, isDisabled && classes.disabled_img)}
-        style={{backgroundImage: `url(${picId === 1665 ? getPic("build",picId) : getPic(props.type === "tech_chain" ? "tech" : props.type,picId)})`, backgroundColor: isDisabled ?   'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0)'}}
-        // src={ picId === 1665 ? getPic("build",picId) : getPic(props.type === "tech_chain" ? "tech" : props.type,picId)}
+        style={{backgroundImage: `url(${picId === 1665 ? getPic("build", resolvedImageId!) : getPic(props.type === "tech_chain" ? "tech" : props.type, resolvedImageId!)})`, backgroundColor: isDisabled ?   'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0)'}}
+        // src={ picId === 1665 ? getPic("build",resolvedImageId!) : getPic(props.type === "tech_chain" ? "tech" : props.type,resolvedImageId!)}
         // src={""}
         // alt={String(picId)}
         
@@ -311,9 +338,9 @@ export const Card: FC<Props> = (props) => {
           {chain.map((item, idx) => {
             const enabled = (() => {
               if (props.type === "unit") {
-                return props.unique ? true : props.civData.units.some((unit) => unit.id === item);
+                return props.unique ? true : props.civData.units.some((unit) => unit.id === item && unit.available !== false);
               } else if (props.type === "tech_chain") {
-                return props.chain.some((id) => id === 1665) ? true : props.civData.techs.some((tech) => tech.id === item);
+                return props.chain.some((id) => id === 1665) ? true : props.civData.techs.some((tech) => tech.id === item && tech.available !== false);
               }
 
               return item !== 0;

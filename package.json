@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "rebuild-data": "node scripts/rebuild_data.js",
+    "prebuild": "npm run rebuild-data",
+    "build": "npm run rebuild-data && tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "deploy": "yarn build && gh-pages -d dist"

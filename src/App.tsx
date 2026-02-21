@@ -80,8 +80,8 @@ function App() {
     return <div className={classes.info_text}>
       {bonus.map((b) => (<p>⚙️{cleanString(b)}</p>))}
       <p><b>TB:</b> {cleanString(teamBonus)}</p>
-      <div style={{display: "inline-flex"}}><img alt="UT1" src="https://aoe2techtree.net/img/Techs/unique_tech_1.png" /><p>{cleanString(ut1.replace(")", ""))}</p></div>
-      <div style={{display: "inline-flex"}}><img alt="UT2" src="https://aoe2techtree.net/img/Techs/unique_tech_2.png" /><p>{cleanString(ut2.replace(")", ""))}</p></div>
+      <div style={{display: "inline-flex"}}><img alt="UT1" src="https://aoe2techtree.net/img/Tech/33.png" /><p>{cleanString(ut1.replace(")", ""))}</p></div>
+      <div style={{display: "inline-flex"}}><img alt="UT2" src="https://aoe2techtree.net/img/Tech/107.png" /><p>{cleanString(ut2.replace(")", ""))}</p></div>
     </div>;
   };
 

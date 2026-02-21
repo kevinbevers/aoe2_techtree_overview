@@ -3,7 +3,7 @@ import { EBuild, tree } from "src/fixtures/tree.ts";
 import { request } from "src/utils/request.ts";
 import { config } from "src/config.ts";
 
-export type TechTreeCiv = "Aztecs" | "Bengalis" | "Berbers" | "Bohemians" | "Britons" | "Bulgarians" | "Burgundians" | "Burmese" | "Byzantines" | "Celts" | "Chinese" | "Cumans" | "Dravidians" | "Ethiopians" | "Franks" | "Goths" | "Gurjaras" | "Hindustanis" | "Huns" | "Incas" | "Italians" | "Japanese" | "Jurchens" | "Khitans" | "Khmer" | "Koreans" | "Lithuanians" | "Magyars" | "Malay" | "Malians" | "Mayans" | "Mongols" | "Persians" | "Poles" | "Portuguese" | "Romans" | "Saracens" | "Shu" | "Sicilians" | "Slavs" | "Spanish" | "Tatars" | "Teutons" | "Turks" | "Vietnamese" | "Vikings" | "Wei" | "Wu";
+export type TechTreeCiv = "Aztecs" | "Bengalis" | "Berbers" | "Bohemians" | "Britons" | "Bulgarians" | "Burgundians" | "Burmese" | "Byzantines" | "Celts" | "Chinese" | "Cumans" | "Dravidians" | "Ethiopians" | "Franks" | "Goths" | "Gurjaras" | "Hindustanis" | "Huns" | "Incas" | "Italians" | "Japanese" | "Jurchens" | "Khitans" | "Khmer" | "Koreans" | "Lithuanians" | "Magyars" | "Malay" | "Malians" | "Mayans" | "Mongols" | "Persians" | "Poles" | "Portuguese" | "Romans" | "Saracens" | "Shu" | "Sicilians" | "Slavs" | "Spanish" | "Tatars" | "Teutons" | "Turks" | "Vietnamese" | "Vikings" | "Wei" | "Wu" | "Mapuche" | "Muisca" | "Tupi";
 
 export type TechTreeData = {
   civ_helptexts: Record<TechTreeCiv, string>;
@@ -12,10 +12,14 @@ export type TechTreeData = {
     buildings: Array<{
       id: EBuild;
       age: number;
+      picture_index?: number;
+      available?: boolean;
     }>,
     techs: Array<{
       id: number;
       age: number;
+      picture_index?: number;
+      available?: boolean;
     }>;
     unique: {
       castleAgeUniqueTech: number;
@@ -26,6 +30,8 @@ export type TechTreeData = {
     units: Array<{
       id: number;
       age: number;
+      picture_index?: number;
+      available?: boolean;
     }>;
   }>;
   data: {
@@ -48,7 +54,7 @@ export const useDataTechTree = () => {
       setLoading(true);
 
       const [resp1, resp2] = await Promise.all([
-        request<TechTreeData>(`${config.API_AOE2TECHTREE_BASE}/data.json`),
+        request<TechTreeData>('/data/processed_data.json'),
         request<TechTreeStrings>(`${config.API_AOE2TECHTREE_BASE}/locales/en/strings.json`),
       ]);
 
