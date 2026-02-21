@@ -149,6 +149,8 @@ export const Card: FC<Props> = (props) => {
       removeUnitFromChainIfNotCiv(props.civName, props.chain, "Vietnamese", 7, 1155) ??
       // houfnice
       removeUnitFromChainIfNotCiv(props.civName, props.chain, "Bohemians", 36, 1709) ??
+      // Bolas rider
+      removeUnitFromChainIfNotCiv(props.civName, props.chain, "Mapuche", 2569, 2571) ??
       // Imp camel rider
       removeUnitFromChainIfNotCiv(props.civName, props.chain, "Hindustanis", 329, 207) ??
       //Dragon ship (Chinese) 1302 instead of 532 fast fire ship
@@ -270,8 +272,37 @@ export const Card: FC<Props> = (props) => {
 
       const result = listOfAvailableUnits.slice(-1)[0];
       if(result !== undefined){
-        // Slinger, Imp Skirm, Hoefnice, Genitour, VikingShip, Caraval, turtleShip, Legionary, Conditierro, Flemish Militia, Shirvamsha Rider, Savar, Winged Hussar, Camel Scout, thirisadai, Jian Swordsmen, Grenadier, Mounted Treb, War Chariot, chinese dragon ship, warrior priest, hero (shu), hero (wu), hero(wei)
-          if([185, 1155, 1709, 1012, 533, 1006, 832, 1793, 882, 1699, 1753, 1813, 1707, 1755, 207, 1263, 1750, 1974, 1911, 1923,1962, 1302, 1811, 1966, 1954, 1978].includes(result)) {
+          if([
+            1155, // Imp Skirm,
+            1709, // Hoefnice,
+            1012, // Genitour,
+            1911, // Grenadier,
+            1962, // War chariot,
+            533, // Viking ship,
+            1006, // Caraval,
+            832, // Legionary,
+            1793, // Conditierro,
+            882, // Turtle ship
+            1699, // Flemish Militia,
+            1753, // Shirvamsha Rider,
+            1813, // Savar,
+            1707, // Winged Hussar,
+            1755, // Camel Scout,
+            207, // Camel Rider,
+            1263, // Flaming camel,
+            1750, // Thirisdai
+            1974, // Jian Swordsmen
+            1923, // Siege camel (Mounted treb)
+            1302, // Chinese Dragonship
+            1811, // Warrior priest
+            1966, // Hero (shu)
+            1954, // Hero (wu)
+            1978, // Hero (wei)
+            1952, // Xianbei Raider
+            2569, 2571, // Bolas rider
+            2586, 2587, // Temple guard line
+            2582, 2584 // Ibirapema warrior line
+          ].includes(result)) {
             return true;
           }
         }
@@ -300,8 +331,23 @@ export const Card: FC<Props> = (props) => {
 
       const result = listOfAvailableUnits.slice(-1)[0];
       if(result !== undefined){
-        //  Camel, Heavy Camel, Eagle scout, eagle warrior, elite eagle warrior, Fire lancer, Elite fire lancer, Battle Elephant, Elite Battle Elephant, Steppe Lancer, Elite Steppe, Lou Chuan, Dromon, Xolotl Warrior, Rocket Cart, Heavy Rocket Cart, Armored Elephant, Siege Elephant, Traction Treb, Elephant Archer, Elite Elephant Archer, Catapult galleon
-          if([329, 330, 751, 753, 752, 1901, 1903, 1132, 1134, 1370, 1372, 1948, 1795, 1570, 1904, 1907, 1744, 1746, 1942, 873, 875, 2633].includes(result)) {
+          if([329, 330, // Camel, Heavy Camel,
+            751, 753, 752, // Eagle scout, eagle warrior, elite eagle warrior,
+            1901, 1903, //  Fire lancer, Elite fire lancer,
+            1132, 1134, // Battle Elephant, Elite Battle Elephant,
+            1370, 1372, // Steppe Lancer, Elite Steppe,
+            1948, // Lou Chuan,
+            1795, // Dromon,
+            1570, //  Xolotl Warrior,
+            1904, 1907, // Rocket Cart, Heavy Rocket Cart,
+            1744, 1746, // Armored Elephant, Siege Elephant,
+            1942, // Traction Treb,
+            873, 875, // Elephant Archer, Elite Elephant Archer,
+            2633, // Catapult galleon,
+            185, // Slinger
+            2550, 2588, 2552, 2554, // Champi warrior line
+            1944, 1946 // Hei Guang Cavalry, Elite Hei Guang Cavalry
+          ].includes(result)) {
             return true;
           }
         }

@@ -38,10 +38,13 @@ export const tree: Tree = {
     [EBuild.BARRACKS]: {
       units: [
         [75, 77, 473, 567, 1793], //74, 75 //Militia line (Add 75 for jurchesn and now all militia line has 4 upgrade dots instead of 3 in previous build)
+        [2550, 2588, 2552, 2554], // champi warrior line
         [93, 358, 359], // Spearman line
         [751, 753, 752], // Eagle line
         [1901, 1903], //Fire lancer
         [882],
+        [2582, 2584], // Ibirapema warrior line
+        [2586, 2587], // Temple guard line
         [1699], //Conditierro?
         [1974], //Jian swordsmen
       ],
@@ -58,6 +61,7 @@ export const tree: Tree = {
         [5],
         [1911], // Grenadier
         [1952], //Xianbei Raider
+        [2569, 2571] //Bolas rider
       ],
       // techs: [437, 436]
     },
@@ -71,6 +75,7 @@ export const tree: Tree = {
         [1132, 1134],
         [1370, 1372],
         [1570],
+        [1944, 1946]
       ],
       // techs: [435, 39],
     },
@@ -79,12 +84,14 @@ export const tree: Tree = {
         [1258, 422, 548],
         [1744, 1746],
         [280, 550, 588],
-        [1904,1907],
+        [1904,1907], // Magonel line
         [1923],
         [1942],
-        [279, 542],
-        [1105],
+        [279, 542], // Scorpion line
+        [1962], // War Chariot
+        //[1105], // Siege tower
         [36, 1709],
+        [331], // Treb
         [1263]
       ],
     },

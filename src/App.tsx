@@ -149,7 +149,16 @@ function App() {
       if (!dataUrl) continue;
 
       const base64 = dataUrl.split(',')[1];
-      zip.file(`${civ.toLowerCase()}.png`, base64, { base64: true });
+      
+      // Rename specific civs for download
+      let filename = civ.toLowerCase();
+      if (civ === "Hindustanis") {
+        filename = "indians";
+      } else if (civ === "Berbers") {
+        filename = "berber";
+      }
+      
+      zip.file(`${filename}.png`, base64, { base64: true });
 
       await new Promise((r) => setTimeout(r, 150));
     }
