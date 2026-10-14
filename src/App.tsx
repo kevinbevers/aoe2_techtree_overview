@@ -94,23 +94,30 @@ function App() {
     return(final_pre_clean.replace(" ", "_"));
   };
 
+  // Resize to the size the mod UI expects (replaces the manual bulk-resize step)
+  const resizePng = (dataUrl: string, width = 720, height = 240): Promise<string> => new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return reject(new Error('No canvas context'));
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, 0, 0, width, height);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror = reject;
+    img.src = dataUrl;
+  });
+
   const captureElementToPng = async (element: HTMLElement | null): Promise<string | null> => {
     if (!element) return null;
 
-    // hide other wrappers to avoid empty/blank captures; keep the wrapper that contains the element
-    const wrappers = Array.from(document.querySelectorAll(`.${classes.wrapper}`)) as HTMLElement[];
-    const wrapperToKeep = element.closest(`.${classes.wrapper}`) as HTMLElement | null;
-    wrappers.forEach((w) => { if (w !== wrapperToKeep) w.style.visibility = 'hidden'; });
-
-    // small delay to ensure styles applied
-    await new Promise((r) => setTimeout(r, 250));
-
-    try {
-      const dataUrl = await domtoimage.toPng(element, { quality: 1 });
-      return dataUrl;
-    } finally {
-      wrappers.forEach((w) => { w.style.visibility = ''; });
-    }
+    // dom-to-image renders a clone of the element, so other civs on the page don't need hiding
+    const dataUrl = await domtoimage.toPng(element, { quality: 1 });
+    return await resizePng(dataUrl);
   };
 
   const handleDownloadImageAlt = async (civName: Civ) => {
@@ -138,18 +145,21 @@ function App() {
     allCivs.forEach((c) => allMap.set(c, true));
     setSelectedCivs(allMap);
 
-    // wait for the UI to render the newly selected civs
-    await new Promise((r) => setTimeout(r, 400));
+    // wait until every civ has rendered (instead of a fixed delay)
+    const deadline = Date.now() + 5000;
+    while (allCivs.some((c) => !printRefs.current.has(c)) && Date.now() < deadline) {
+      await new Promise((r) => setTimeout(r, 50));
+    }
 
     const zip = new JSZip();
 
-    for (const civ of allCivs) {
+    const captureCiv = async (civ: Civ) => {
       const element = printRefs.current.get(civ) || null;
       const dataUrl = await captureElementToPng(element);
-      if (!dataUrl) continue;
+      if (!dataUrl) return;
 
       const base64 = dataUrl.split(',')[1];
-      
+
       // Rename specific civs for download
       let filename = civ.toLowerCase();
       if (civ === "Hindustanis") {
@@ -157,11 +167,18 @@ function App() {
       } else if (civ === "Berbers") {
         filename = "berber";
       }
-      
-      zip.file(`${filename}.png`, base64, { base64: true });
 
-      await new Promise((r) => setTimeout(r, 150));
-    }
+      zip.file(`${filename}.png`, base64, { base64: true });
+    };
+
+    // capture a few civs in parallel
+    const queue = [...allCivs];
+    const worker = async () => {
+      for (let civ = queue.shift(); civ; civ = queue.shift()) {
+        await captureCiv(civ);
+      }
+    };
+    await Promise.all(Array.from({ length: 4 }, worker));
 
     const content = await zip.generateAsync({ type: 'blob' });
     saveAs(content, 'civs.zip');

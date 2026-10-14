@@ -114,7 +114,7 @@
   }
 
   & img {
-    height: 4vh;
+    height: 42px; /* fixed so exports don't depend on browser window height */
     display: inline-block;
     vertical-align: middle;
   }

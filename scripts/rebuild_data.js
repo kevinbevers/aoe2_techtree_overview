@@ -46,9 +46,7 @@ async function transformData() {
 
         // Map civ names to their tree file names (for cases where they don't match)
         const civToTreeNameMap = {
-            "Hindustanis": "INDIANS",
-            "Magyars": "MAGYAR",
-            // Add other mappings here if needed
+            // Add mappings here if needed (e.g. "Hindustanis": "INDIANS" used to be required)
         };
 
         // First, fetch a reference civ that has all buildings to get a complete list of all techs and buildings

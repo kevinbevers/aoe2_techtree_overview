@@ -47,6 +47,7 @@ export const tree: Tree = {
         [2586, 2587], // Temple guard line
         [1699], //Conditierro?
         [1974], //Jian swordsmen
+        [2703, 2704], // Varangian Guard line
       ],
       // techs: [716, 875, 215, 602],
     },
@@ -56,6 +57,7 @@ export const tree: Tree = {
         [7, 6, 1155],
         [185],
         [39, 474],
+        [2700, 2701], // Mounted Crossbowman line (replaces Cav Archer for western civs, so keep it in the same slot)
         [873, 875],
         [1010, 1012],
         [5],
