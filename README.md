@@ -9,7 +9,7 @@ npm run dev
 ```
 
 Then click a civ badge on the site, see the tech tree overview and press download image. the downloaded image is used in the mod to be part of the UI.
-Resize to width 720, height 240 to have them all work ingame with https://imageresizer.com/bulk-resize or https://bulkimageresize.com/
+Downloads are automatically resized to width 720, height 240 so they work ingame (no need for a bulk resize tool anymore).
 
 
 
@@ -17,6 +17,7 @@ Resize to width 720, height 240 to have them all work ingame with https://imager
 a .json per civ in trees/ARMENIANS.json for example.
 And less info in data.json.
 unit id is not the image id there is now a seperate picture_index.
+Tree filenames now match the uppercased civ key (e.g. trees/HINDUSTANIS.json, trees/MAGYARS.json), so no name mapping is needed anymore.
 
 These are now the image paths
     civ: "Civs",

@@ -278,7 +278,6 @@ export const Card: FC<Props> = (props) => {
             1012, // Genitour,
             1911, // Grenadier,
             1962, // War chariot,
-            533, // Viking ship,
             1006, // Caraval,
             832, // Legionary,
             1793, // Conditierro,
@@ -346,7 +345,10 @@ export const Card: FC<Props> = (props) => {
             2633, // Catapult galleon,
             185, // Slinger
             2550, 2588, 2552, 2554, // Champi warrior line
-            1944, 1946 // Hei Guang Cavalry, Elite Hei Guang Cavalry
+            1944, 1946, // Hei Guang Cavalry, Elite Hei Guang Cavalry
+            250, 533, // Longship, Elite Longship
+            2700, 2701, // Mounted Crossbowman, Heavy Mounted Crossbowman
+            2703, 2704 // Varangian Guard, Elite Varangian Guard
           ].includes(result)) {
             return true;
           }
